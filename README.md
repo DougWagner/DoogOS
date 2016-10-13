@@ -10,6 +10,8 @@ The build script is horrible and I plan on changing that in the future.
 
 Code is inspired by tutorials at wiki.osdev.org, but not identical (I TRIED to do my own thing based on the principles there)
 
+NOTE: `crti.s` and `crtn.s` are not used at the moment as I am still trying to learn more about how global constructors work.
+
 ##Compiling and running DoogOS
 
 ###Compiling
