@@ -25,18 +25,24 @@ stack_top:
 .global _start
 .type _start, @function
 _start:
-#2:
-# TODO: test jmp by puting 10 in register and jumping while not zero
     mov     esp, offset stack_top
+    call    t_init
+
+# Commented lines were for testing something stupid. Please ignore.
+#    mov     ax, 2
+#Loop:
+#    push    ax
     call    kernel_main
-# TODO: jmp to 2 if register is not zero
+#    pop     ax
+#    dec     ax
+#    jnz     Loop
     cli
-1:  
+Hang:  
     hlt
-    jmp 1b
+    jmp     Hang
 
-# TODO(doug): Load GDT
+# TODO: Load GDT
 
-# TODO(doug): Implement ISRs
+# TODO: Implement ISRs
 
 .size _start, . - _start
