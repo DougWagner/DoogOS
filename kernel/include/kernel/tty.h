@@ -8,8 +8,11 @@ void t_init(void);
 void t_putchar(char);
 void t_write(const char*, size_t);
 void t_writestr(const char*);
+void t_writeint(int); // TEMPORARY
 void t_scroll(void);
 void t_setcolor(uint8_t);
 void t_defaultcolor(void);
+
+extern int asm_add(int, int);
 
 #endif

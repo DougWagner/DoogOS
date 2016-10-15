@@ -23,6 +23,7 @@ If the cross compiler is not in your PATH environment variable, you may want to 
 
 In addition to a cross-compiler, DoogOS requires GRUB in order to make a bootable iso/disk.
 The build script `build.sh` will execute the command `grub-mkrescue` which also requires an installation of xorriso in order to make the .iso file.
+If there are any error/warning messages from gcc during the build script, the script will continue and attempt to make the .iso (because it's absolutely terrible), so if that happens, you probably should not run the iso in QEMU, and especially not on actual hardware.
 
 ###Running
 
