@@ -57,23 +57,6 @@ void t_writestr(const char* str) {
     t_write(str, strlen(str));
 }
 
-// FIXME: REALLY BAD IMPLEMENTATION, THIS FUNCTION IS TEMPORARY
-void t_writeint(int val) {
-    char str[11];
-    int len = 0;
-    for (int i = 0; val > 0; val /= 10, i++, len++) {
-        int num = val % 10;
-        str[i] = 48 + num;
-    }
-    str[len--] = 0;
-    for (int i = 0; i < len; i++, len--) {
-        char temp = str[i];
-        str[i] = str[len];
-        str[len] = temp;
-    }
-    t_writestr(str);
-}
-
 void t_scroll(void) {
     size_t i;
     for (i = 0; i < T_HEIGHT * T_WIDTH - T_WIDTH; i++)
