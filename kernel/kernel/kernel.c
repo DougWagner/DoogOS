@@ -17,7 +17,9 @@ void kernel_main(void) {
     char arr[20];
     char* newstr = arr;
     newstr = strcpy(str, newstr);
+    delay(20);
     t_writestr(newstr);
+    delay(20);
     t_writestr("\n");
     /*
     char* str = "abcdefghijklmnopqrstuvwxyz";

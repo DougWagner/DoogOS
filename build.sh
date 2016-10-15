@@ -35,10 +35,5 @@ rm kernel/arch/i386/cursor.o
 rm kernel/arch/i386/mov_cursor.o
 rm kernel/arch/i386/tty.o
 rm kernel/kernel/kernel.o
-rm libc/string/memcpy.libc.o
-rm libc/string/memmove.libc.o
-rm libc/string/strcpy.libc.o
-rm libc/string/strncpy.libc.o
-rm libc/string/strlen.libc.o
 rm -rf sysroot
 rm -rf iso
