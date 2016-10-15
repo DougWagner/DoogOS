@@ -1,7 +1,11 @@
 #include <kernel/tty.h>
 
-void delay() {
-    for(volatile size_t i = 0; i < 1000000; i++);
+// THIS FUNCTION IS TEMPORARY
+void delay(size_t x) {
+    for(volatile size_t i = 0; i < x; i++) {
+        for(volatile size_t j = 0; j < 1000000; j++)
+            ;
+    }
 }
 
 void kernel_main(void) {
@@ -13,7 +17,7 @@ void kernel_main(void) {
     for (size_t i = 0;;i++) {
         current[0] = str[i % 26];
         t_writestr(current);
-        delay();
+        delay(1);
     }
     /*for (int i = 1; i < 16; i++) {
         t_setcolor(vga_entry_color(i, VGA_BLACK));

@@ -37,10 +37,4 @@ Hang:
 
 # TODO: Implement ISRs
 
-#.global _mcursor
-#.type _mcursor, @function
-#_mcursor:
-#    push    ebp
-#    mov     ebp, esp
-
 .size _start, . - _start
