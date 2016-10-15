@@ -27,15 +27,7 @@ stack_top:
 _start:
     mov     esp, offset stack_top
     call    t_init
-
-# Commented lines were for testing something stupid. Please ignore.
-    #mov     ax, 5
-#Loop:
-    #push    ax
     call    kernel_main
-    #pop     ax
-    #dec     ax
-    #jnz     Loop
     cli
 Hang:  
     hlt
@@ -50,16 +42,5 @@ Hang:
 #_mcursor:
 #    push    ebp
 #    mov     ebp, esp
-
-.global asm_add
-.type asm_add, @function
-asm_add:
-    push    ebp             # save base pointer on stack
-    mov     ebp, esp        # set base pointer for function
-    mov     eax, 8[ebp]     # move arg1 into eax
-    mov     edx, 12[ebp]    # move arg2 into edx
-    add     eax, edx        # add edx into eax
-    pop     ebp             # restore base pointer from stack
-    ret                     # return
 
 .size _start, . - _start
