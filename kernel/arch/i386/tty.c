@@ -44,6 +44,7 @@ void t_putchar(char c) {
     }
     if (t_row == T_HEIGHT)
         t_scroll();
+    update_cursor(t_row, t_column);
     // TODO: make case for '\r'
 }
 
