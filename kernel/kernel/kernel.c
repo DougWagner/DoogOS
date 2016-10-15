@@ -1,4 +1,5 @@
 #include <kernel/tty.h>
+#include <string.h>
 
 // THIS FUNCTION IS TEMPORARY
 void delay(size_t x) {
@@ -11,6 +12,14 @@ void delay(size_t x) {
 void kernel_main(void) {
     t_writestr("Hello kernel world!\n");
     t_writestr("blahblahblah\n");
+    t_writestr("gonna test some string.h functions now\n");
+    char* str = "testing strcpy";
+    char arr[20];
+    char* newstr = arr;
+    newstr = strcpy(str, newstr);
+    t_writestr(newstr);
+    t_writestr("\n");
+    /*
     char* str = "abcdefghijklmnopqrstuvwxyz";
     char current[2];
     current[1] = 0;
@@ -19,8 +28,5 @@ void kernel_main(void) {
         t_writestr(current);
         delay(1);
     }
-    /*for (int i = 1; i < 16; i++) {
-        t_setcolor(vga_entry_color(i, VGA_BLACK));
-        t_writestr("wheeeeeeeee");
-    }*/
+    */
 }

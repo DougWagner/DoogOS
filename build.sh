@@ -3,12 +3,8 @@
 mkdir -p sysroot/usr/include
 cp -R --preserve=timestamps libc/include/. sysroot/usr/include
 
-#compile standard library
-i686-elf-gcc --sysroot=/home/doug/os_project/DoogOS/sysroot -isystem=/usr/include -c libc/string/strlen.c -o libc/string/strlen.libk.o -std=gnu11 -O2 -g -ffreestanding -Wall -Wextra
-i686-elf-ar rcs libk.a libc/string/strlen.libk.o
-
-mkdir -p sysroot/usr/lib
-cp libk.a sysroot/usr/lib
+# make libc
+./makelib.sh
 
 cp -R --preserve=timestamps kernel/include/. sysroot/usr/include
 
@@ -17,7 +13,7 @@ i686-elf-gcc --sysroot=/home/doug/os_project/DoogOS/sysroot -isystem=/usr/includ
 i686-elf-gcc --sysroot=/home/doug/os_project/DoogOS/sysroot -isystem=/usr/include -c kernel/arch/i386/tty.c -o kernel/arch/i386/tty.o -std=gnu11 -O2 -g -ffreestanding -Wall -Wextra
 i686-elf-gcc --sysroot=/home/doug/os_project/DoogOS/sysroot -isystem=/usr/include -c kernel/arch/i386/cursor.c -o kernel/arch/i386/cursor.o -std=gnu11 -O2 -g -ffreestanding -Wall -Wextra
 i686-elf-gcc --sysroot=/home/doug/os_project/DoogOS/sysroot -isystem=/usr/include -c kernel/kernel/kernel.c -o kernel/kernel/kernel.o -std=gnu11 -O2 -g -ffreestanding -Wall -Wextra
-i686-elf-gcc --sysroot=/home/doug/os_project/DoogOS/sysroot -isystem=/usr/include -T kernel/arch/i386/linker.ld -o DoogOS.kernel -O2 -g -ffreestanding -Wall -Wextra kernel/arch/i386/boot.o kernel/arch/i386/mov_cursor.o kernel/arch/i386/tty.o kernel/arch/i386/cursor.o kernel/kernel/kernel.o -nostdlib -lk -lgcc
+i686-elf-gcc --sysroot=/home/doug/os_project/DoogOS/sysroot -isystem=/usr/include -T kernel/arch/i386/linker.ld -o DoogOS.kernel -O2 -g -ffreestanding -Wall -Wextra kernel/arch/i386/boot.o kernel/arch/i386/mov_cursor.o kernel/arch/i386/tty.o kernel/arch/i386/cursor.o kernel/kernel/kernel.o -nostdlib -lc -lgcc
 echo "compilation done"
 mkdir -p sysroot/boot
 cp DoogOS.kernel sysroot/boot
@@ -33,12 +29,16 @@ grub-mkrescue -o DoogOS.iso iso
 
 # time to clean up
 rm DoogOS.kernel
-rm libk.a
+rm libc.a
 rm kernel/arch/i386/boot.o
 rm kernel/arch/i386/cursor.o
 rm kernel/arch/i386/mov_cursor.o
 rm kernel/arch/i386/tty.o
 rm kernel/kernel/kernel.o
-rm libc/string/strlen.libk.o
+rm libc/string/memcpy.libc.o
+rm libc/string/memmove.libc.o
+rm libc/string/strcpy.libc.o
+rm libc/string/strncpy.libc.o
+rm libc/string/strlen.libc.o
 rm -rf sysroot
 rm -rf iso
