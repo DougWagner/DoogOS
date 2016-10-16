@@ -7,9 +7,7 @@ char* strcpy(char* __restrict s1, const char* __restrict s2) {
     unsigned char* dst = (unsigned char*) s1;
     const unsigned char* src = (const unsigned char*) s2;
     while (*src != 0) {
-        *dst = *src;
-        dst++;
-        src++;
+        *(dst++) = *(src++);
     }
     *dst = *src; // put '\0' at end of dst
     return s1;

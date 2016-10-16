@@ -16,19 +16,17 @@ void kernel_main(void) {
     char* str = "testing strcpy";
     char arr[20];
     char* newstr = arr;
-    newstr = strcpy(str, newstr);
+    newstr = strcpy(newstr, str);
     delay(20);
     t_writestr(newstr);
     delay(20);
     t_writestr("\n");
-    /*
-    char* str = "abcdefghijklmnopqrstuvwxyz";
+    char* alpha = "abcdefghijklmnopqrstuvwxyz";
     char current[2];
     current[1] = 0;
     for (size_t i = 0;;i++) {
-        current[0] = str[i % 26];
+        current[0] = alpha[i % 26];
         t_writestr(current);
         delay(1);
     }
-    */
 }
