@@ -15,7 +15,7 @@ char* strstr(const char* s1, const char* s2) {
     for (; *str1 != 0; str1++) {
         if (*str1 == *str2) {
             if (checkstr(str1, str2)) {
-                return str1;
+                return (char*) str1;
             }
         }
     }

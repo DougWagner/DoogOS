@@ -20,6 +20,9 @@ static size_t t_column;
 static uint8_t t_color;
 static uint16_t* t_buffer;
 
+// u16memset prototype
+void* u16memset(void*, int, size_t);
+
 void t_init(void) {
     t_row = 0;
     t_column = 0;
@@ -58,11 +61,8 @@ void t_writestr(const char* str) {
 }
 
 void t_scroll(void) {
-    size_t i;
-    for (i = 0; i < T_HEIGHT * T_WIDTH - T_WIDTH; i++)
-        t_buffer[i] = t_buffer[i + T_WIDTH];
-    for (; i < T_HEIGHT * T_WIDTH; i++)
-        t_buffer[i] = vga_entry(' ', DEFAULT_COLOR);
+    memmove(t_buffer, t_buffer + T_WIDTH, (T_WIDTH * (T_HEIGHT - 1)) * 2);
+    u16memset(t_buffer + ((T_WIDTH * (T_HEIGHT - 1))), vga_entry(' ', DEFAULT_COLOR), T_WIDTH);
     t_row--;
 }
 
@@ -72,4 +72,13 @@ void t_setcolor(uint8_t color) {
 
 void t_defaultcolor(void) {
     t_color = DEFAULT_COLOR;
+}
+
+// 16 bit memset - this will probably move somewhere else in the future
+void* u16memset(void* s, int c, size_t n) {
+    uint16_t* dst = (uint16_t*) s;
+    for (size_t i = 0; i < n; i++) {
+        *(dst++) = (uint16_t) c;
+    }
+    return s;
 }

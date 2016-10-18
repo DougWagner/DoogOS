@@ -9,18 +9,10 @@ void delay(size_t x) {
     }
 }
 
+
+
 void kernel_main(void) {
-    t_writestr("Hello kernel world!\n");
-    t_writestr("blahblahblah\n");
-    t_writestr("gonna test some string.h functions now\n");
-    char* str = "testing strcpy";
-    char arr[20];
-    char* newstr = arr;
-    newstr = strcpy(newstr, str);
-    delay(20);
-    t_writestr(newstr);
-    delay(20);
-    t_writestr("\n");
+    t_writestr("Welcome to DoogOS! Have fun doing nothing!\n");
     char* alpha = "abcdefghijklmnopqrstuvwxyz";
     char current[2];
     current[1] = 0;

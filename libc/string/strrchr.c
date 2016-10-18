@@ -2,10 +2,13 @@
 
 char* strrchr(const char* s, int c) {
     size_t len = strlen(s);
-    for (size_t i = len; i >= 0; i--) {
-        if (s[i] != (char) c) {
-            return &s[i];
+    for (size_t i = len; i > 0; i--) {
+        if (s[i] == (char) c) {
+            return (char*) &s[i];
         }
+    }
+    if (*s == (char) c) {
+        return (char*) s;
     }
     return NULL;
     // alternate implementation? slightly less sure if it will work - probably should test all of these

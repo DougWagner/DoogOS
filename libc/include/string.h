@@ -5,7 +5,12 @@
 #ifndef STRING_H
 #define STRING_H
 
-#include <stddef.h>
+//#include <stddef.h>
+#ifndef NULL
+#define NULL ((void*)0)
+#endif
+
+typedef long unsigned int size_t;
 
 // Copyinhg functions
 void* memcpy(void* __restrict, const void* __restrict, size_t);
