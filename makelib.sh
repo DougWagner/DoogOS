@@ -30,22 +30,3 @@ i686-elf-ar rcs libc.a libc/string/memcpy.libc.o libc/string/memmove.libc.o libc
 
 mkdir -p sysroot/usr/lib
 cp libc.a sysroot/usr/lib
-
-rm libc/string/memcpy.libc.o
-rm libc/string/memmove.libc.o
-rm libc/string/strcpy.libc.o
-rm libc/string/strncpy.libc.o
-rm libc/string/strcat.libc.o
-rm libc/string/strncat.libc.o
-rm libc/string/memcmp.libc.o
-rm libc/string/strcmp.libc.o
-rm libc/string/strncmp.libc.o
-rm libc/string/memchr.libc.o
-rm libc/string/strchr.libc.o
-rm libc/string/strcspn.libc.o
-rm libc/string/strpbrk.libc.o
-rm libc/string/strrchr.libc.o
-rm libc/string/strspn.libc.o
-rm libc/string/strstr.libc.o
-rm libc/string/memset.libc.o
-rm libc/string/strlen.libc.o

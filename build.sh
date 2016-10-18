@@ -28,12 +28,5 @@ EOF
 grub-mkrescue -o DoogOS.iso iso
 
 # time to clean up
-rm DoogOS.kernel
-rm libc.a
-rm kernel/arch/i386/boot.o
-rm kernel/arch/i386/cursor.o
-rm kernel/arch/i386/mov_cursor.o
-rm kernel/arch/i386/tty.o
-rm kernel/kernel/kernel.o
-rm -rf sysroot
-rm -rf iso
+echo "cleaning up our mess"
+./clean.sh
