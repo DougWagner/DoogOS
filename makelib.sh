@@ -26,7 +26,7 @@ i686-elf-gcc --sysroot=/home/doug/os_project/DoogOS/sysroot -isystem=/usr/includ
 i686-elf-gcc --sysroot=/home/doug/os_project/DoogOS/sysroot -isystem=/usr/include -c libc/string/strlen.c -o libc/string/strlen.libc.o -std=gnu11 -O2 -g -ffreestanding -Wall -Wextra
 
 # archive libc
-i686-elf-ar rcs libc.a libc/string/memcpy.libc.o libc/string/memmove.libc.o libc/string/strcpy.libc.o libc/string/strncpy.libc.o libc/string/strlen.libc.o
+i686-elf-ar rcs libc.a libc/string/memcpy.libc.o libc/string/memmove.libc.o libc/string/strcpy.libc.o libc/string/strncpy.libc.o libc/string/strcat.libc.o libc/string/strncat.libc.o libc/string/memcmp.libc.o libc/string/strcmp.libc.o libc/string/strncmp.libc.o libc/string/memchr.libc.o libc/string/strchr.libc.o libc/string/strcspn.libc.o libc/string/strpbrk.libc.o libc/string/strrchr.libc.o libc/string/strspn.libc.o libc/string/strstr.libc.o libc/string/memset.libc.o libc/string/strlen.libc.o
 
 mkdir -p sysroot/usr/lib
 cp libc.a sysroot/usr/lib

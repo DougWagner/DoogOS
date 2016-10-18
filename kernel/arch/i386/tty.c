@@ -28,8 +28,9 @@ void t_init(void) {
     t_column = 0;
     t_color = vga_entry_color(VGA_LIGHT_GREY, VGA_BLACK);
     t_buffer = T_MEMORY;
-    for (size_t i = 0; i < T_WIDTH * T_HEIGHT; i++)
-        t_buffer[i] = vga_entry(' ', t_color);
+    u16memset(t_buffer, vga_entry(' ', DEFAULT_COLOR), T_WIDTH * T_HEIGHT);
+    //for (size_t i = 0; i < T_WIDTH * T_HEIGHT; i++)
+    //    t_buffer[i] = vga_entry(' ', t_color);
 }
 
 void t_putchar(char c) {
@@ -60,6 +61,7 @@ void t_writestr(const char* str) {
     t_write(str, strlen(str));
 }
 
+// this is ugly but whatever
 void t_scroll(void) {
     memmove(t_buffer, t_buffer + T_WIDTH, (T_WIDTH * (T_HEIGHT - 1)) * 2);
     u16memset(t_buffer + ((T_WIDTH * (T_HEIGHT - 1))), vga_entry(' ', DEFAULT_COLOR), T_WIDTH);
