@@ -40,6 +40,7 @@ Hang:
 .global gdt_flush
 .type gdt_flush, @function
 gdt_flush:
+    cli
     mov     eax, 4[esp]
     mov     2[gdt_ptr], eax
     mov     ax, 8[esp]
@@ -53,6 +54,7 @@ complete_flush:
     mov     fs, ax
     mov     gs, ax
     mov     ss, ax
+    sti
     ret
 
 # TODO: Implement ISRs
