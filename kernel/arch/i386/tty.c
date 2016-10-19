@@ -26,7 +26,7 @@ void* u16memset(void*, int, size_t);
 void t_init(void) {
     t_row = 0;
     t_column = 0;
-    t_color = vga_entry_color(VGA_LIGHT_GREY, VGA_BLACK);
+    t_color = DEFAULT_COLOR; //vga_entry_color(VGA_LIGHT_GREY, VGA_BLACK);
     t_buffer = T_MEMORY;
     u16memset(t_buffer, vga_entry(' ', DEFAULT_COLOR), T_WIDTH * T_HEIGHT);
     //for (size_t i = 0; i < T_WIDTH * T_HEIGHT; i++)
