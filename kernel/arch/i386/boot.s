@@ -26,6 +26,7 @@ stack_top:
 .type _start, @function
 _start:
     mov     esp, offset stack_top
+    call    load_gdt
     call    t_init
     call    kernel_main
     cli
@@ -33,8 +34,32 @@ Hang:
     hlt
     jmp     Hang
 
+.size _start, . - _start
+
 # TODO: Load GDT
+.global gdt_flush
+.type gdt_flush, @function
+gdt_flush:
+    mov     eax, 4[esp]
+    mov     2[gdt_ptr], eax
+    mov     ax, 8[esp]
+    mov     [gdt_ptr], ax
+    lgdt    [gdt_ptr]
+    jmp     0x08:complete_flush
+complete_flush:
+    mov     ax, 0x10
+    mov     ds, ax
+    mov     es, ax
+    mov     fs, ax
+    mov     gs, ax
+    mov     ss, ax
+    ret
 
 # TODO: Implement ISRs
 
-.size _start, . - _start
+.section .data
+gdt_ptr:
+    .word 0
+    .long 0
+
+

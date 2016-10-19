@@ -40,4 +40,6 @@
 #define ACC_LOW_EXE_DN_XO 0xfc
 #define ACC_LOW_EXE_DN_RX 0xfe
 
+int load_gdt(void);
+
 #endif

@@ -1,6 +1,8 @@
 #include <stdint.h>
-#include <tty.h>
-#include <gdt.h>
+#include <kernel/tty.h>
+#include "gdt.h"
+
+uint64_t GDT[4]; // size is 4 for testing purposes or something. hopefully shit doesn't break
 
 static int checkFlagBits(uint8_t flags) {
     // this is probably a really stupid way to do this
@@ -40,7 +42,7 @@ static int checkAccessBits(uint8_t access) {
     }
 }
 
-uint64_t generate_gdt_entry(uint32_t base, uint32_t limit, uint8_t flags, uint8_t access) {
+static uint64_t generate_gdt_entry(uint32_t base, uint32_t limit, uint8_t flags, uint8_t access) {
     // check flags to ensure validity
     if (!checkFlagBits(flags)) {
         t_writestr("Invalid flag bits\n");
@@ -70,4 +72,19 @@ uint64_t generate_gdt_entry(uint32_t base, uint32_t limit, uint8_t flags, uint8_
     entry_buffer[5] = access;
     entry_buffer[6] |= (flags << 4); // upper 4 bits of index 6
     return entry;
+}
+
+extern void gdt_flush(uint64_t*, uint16_t);
+// aaaaaaand here we go!
+int load_gdt(void) {
+    GDT[0] = 0; // null descriptor
+    if ((GDT[1] = generate_gdt_entry(0x04000000, 0x7ff, 0xc, 0x9a)) == GDT_ENTRY_ERROR) {
+        return 0;
+    }
+    if ((GDT[2] = generate_gdt_entry(0x08000000, 0x7ff, 0xc, 0x92)) == GDT_ENTRY_ERROR) {
+        return 0;
+    }
+    GDT[3] = 0;
+    gdt_flush(GDT, 4);
+    return 1;
 }
