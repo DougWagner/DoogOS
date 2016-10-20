@@ -19,6 +19,6 @@ void kernel_main(void) {
     for (size_t i = 0;;i++) {
         current[0] = alpha[i % 26];
         t_writestr(current);
-        //delay(1);
+        delay(1);
     }
 }

@@ -11,7 +11,7 @@ void t_writestr(const char*);
 void t_scroll(void);
 void t_setcolor(uint8_t);
 void t_defaultcolor(void);
-void update_cursor(size_t, size_t);
+void update_cursor(void);
 
 extern int asm_add(int, int);
 

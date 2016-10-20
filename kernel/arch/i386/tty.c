@@ -15,8 +15,8 @@ static uint16_t* const T_MEMORY = (uint16_t*) 0xB8000;
 
 // Terminal location variables
 
-static size_t t_row;
-static size_t t_column;
+size_t t_row;
+size_t t_column;
 static uint8_t t_color;
 static uint16_t* t_buffer;
 
@@ -48,7 +48,7 @@ void t_putchar(char c) {
     }
     if (t_row == T_HEIGHT)
         t_scroll();
-    update_cursor(t_row, t_column);
+    update_cursor();
     // TODO: make case for '\r'
 }
 
