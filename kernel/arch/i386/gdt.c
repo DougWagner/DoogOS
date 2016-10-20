@@ -2,7 +2,7 @@
 #include <kernel/tty.h>
 #include "gdt.h"
 
-uint64_t GDT[3];
+uint64_t GDT[5];
 
 static int checkFlagBits(uint8_t flags) {
     // this is probably a really stupid way to do this
@@ -82,6 +82,12 @@ int load_gdt(void) {
         return 0;
     }
     if ((GDT[2] = generate_gdt_entry(0, 0xfffff, 0xc, 0x92)) == GDT_ENTRY_ERROR) {
+        return 0;
+    }
+    if ((GDT[3] = generate_gdt_entry(0, 0xfffff, 0xc, 0xfa)) == GDT_ENTRY_ERROR) {
+        return 0;
+    }
+    if ((GDT[4] = generate_gdt_entry(0, 0xfffff, 0xc, 0xf2)) == GDT_ENTRY_ERROR) {
         return 0;
     }
     //GDT[3] = 0;

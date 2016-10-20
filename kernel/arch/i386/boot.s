@@ -54,7 +54,8 @@ complete_flush:
     mov     fs, ax
     mov     gs, ax
     mov     ss, ax
-    sti
+    #sti            # for some reason it works if i comment this out
+                    # i probably need an IDT or something if i want to reenable interrupts
     ret
 
 # TODO: Implement ISRs
@@ -63,5 +64,3 @@ complete_flush:
 gdt_ptr:
     .word 0
     .long 0
-
-
