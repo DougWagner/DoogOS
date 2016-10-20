@@ -54,7 +54,7 @@ complete_flush:
     mov     fs, ax
     mov     gs, ax
     mov     ss, ax
-    #sti            # for some reason it works if i comment this out
+#    sti             # for some reason it works if i comment this out
                     # i probably need an IDT or something if i want to reenable interrupts
     ret
 
