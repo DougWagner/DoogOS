@@ -54,8 +54,9 @@ complete_flush:
     mov     fs, ax
     mov     gs, ax
     mov     ss, ax
-#    sti             # for some reason it works if i comment this out
-                    # i probably need an IDT or something if i want to reenable interrupts
+    #sti            # this instruction is officially the offender! there is nothing wrong with the GDT! (at least I hope there isn't)
+                    # if I enable interrupts without even loading GDT, behavior will be the same
+                    # so much debugging for nothing.... looks like I need an IDT...
     ret
 
 # TODO: Implement ISRs
