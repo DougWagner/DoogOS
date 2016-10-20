@@ -23,10 +23,15 @@ rm libc/string/strlen.libc.o
 # clean up everything else
 #rm DoogOS.kernel
 #rm libc.a
-#rm kernel/arch/i386/boot.o
-#rm kernel/arch/i386/cursor.o
-#rm kernel/arch/i386/mov_cursor.o
-#rm kernel/arch/i386/tty.o
-#rm kernel/kernel/kernel.o
-#rm -rf sysroot
-#rm -rf iso
+rm kernel/arch/i386/boot.o
+rm kernel/arch/i386/crtbegin.o
+rm kernel/arch/i386/crtend.o
+rm kernel/arch/i386/crti.o
+rm kernel/arch/i386/crtn.o
+rm kernel/arch/i386/cursor.o
+rm kernel/arch/i386/gdt.o
+rm kernel/arch/i386/mov_cursor.o
+rm kernel/arch/i386/tty.o
+rm kernel/kernel/kernel.o
+rm -rf sysroot
+rm -rf iso
