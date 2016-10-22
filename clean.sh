@@ -32,6 +32,7 @@ rm kernel/arch/i386/cursor.o
 rm kernel/arch/i386/gdt.o
 rm kernel/arch/i386/mov_cursor.o
 rm kernel/arch/i386/tty.o
+rm kernel/kernel/printk.o
 rm kernel/kernel/kernel.o
 rm -rf sysroot
 rm -rf iso
