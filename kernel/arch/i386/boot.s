@@ -26,8 +26,9 @@ stack_top:
 .type _start, @function
 _start:
     mov     esp, offset stack_top
-    call    load_gdt
     call    t_init
+    call    load_idt
+    call    load_gdt
     call    kernel_main
     cli
 Hang:  

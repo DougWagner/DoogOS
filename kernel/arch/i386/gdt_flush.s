@@ -17,9 +17,7 @@ complete_flush:
     mov     fs, ax
     mov     gs, ax
     mov     ss, ax
-    #sti            # this instruction is officially the offender! there is nothing wrong with the GDT! (at least I hope there isn't)
-                    # if I enable interrupts without even loading GDT, behavior will be the same
-                    # so much debugging for nothing.... looks like I need an IDT...
+    sti
     ret
 
 .section .data

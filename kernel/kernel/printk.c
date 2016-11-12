@@ -66,6 +66,10 @@ int printk(const char* __restrict fmt, ...) {
             // --INTEGER TYPES--
             case 'u': case 'o': case 'x': case 'X': case 'd': case 'i': case 'p': ; // case for 'p' will only work here on 32 bit systems.
                 unsigned int u = va_arg(args, unsigned int);
+                if (u == 0) {
+                    t_putchar('0');
+                    break;
+                }
                 char intstr[12] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
                 size_t len = 0;
                 // there is probably a better way to do this than using goto statements, but whatever.
@@ -87,7 +91,7 @@ int printk(const char* __restrict fmt, ...) {
                         t_putchar('-');
                         written += 1;
                         remaining -= 1;
-                        u = (unsigned int) d * -1;
+                        u = (unsigned int)(d * -1);
                     }
                     else {
                         u = (unsigned int) d;

@@ -49,7 +49,9 @@ void kernel_main(void) {
     delay(100);
     printk("testing pointers now\n");
     printk("alpha addr: %p\nint1 addr: %p\nu1 addr: %p\n", alpha, &int1, &u1);
-    delay(1000);
+    delay(100);
+    int x = 7, y = 0;
+    printk("divide by zero time!\n%d\n", x / y);
     char current[2];
     current[1] = 0;
     for (size_t i = 0;;i++) {
