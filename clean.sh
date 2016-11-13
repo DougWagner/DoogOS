@@ -29,9 +29,11 @@ rm kernel/arch/i386/crti.o
 rm kernel/arch/i386/crtn.o
 rm kernel/arch/i386/cursor.o
 rm kernel/arch/i386/gdt.o
-rm kernel/arch/i386/interrupts.o
+rm kernel/arch/i386/idt.o
 rm kernel/arch/i386/irq.o
 rm kernel/arch/i386/isr.o
+rm kernel/arch/i386/irq_c.o
+rm kernel/arch/i386/isr_c.o
 rm kernel/arch/i386/gdt_flush.o
 rm kernel/arch/i386/idt_flush.o
 rm kernel/arch/i386/mov_cursor.o

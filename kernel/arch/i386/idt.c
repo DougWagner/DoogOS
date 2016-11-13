@@ -2,7 +2,7 @@
 #include <string.h>
 #include <kernel/kernel.h>
 
-#include "interrupts.h"
+#include "idt.h"
 
 uint64_t IDT[256];
 
@@ -56,6 +56,14 @@ static uint64_t generate_idt_entry(uint32_t offset, uint16_t selector, uint8_t t
     return entry;
 }
 
+void install_idt_entry(size_t idt_idx, uint32_t offset, uint16_t selector, uint8_t type) {
+    uint64_t entry = generate_idt_entry(offset, selector, type);
+    if (entry != 0) {
+        IDT[idt_idx] = generate_idt_entry(offset, selector, type);
+    }
+}
+
+/*
 static void set_interrupts(void) {
     IDT[0] = generate_idt_entry((uint32_t)&ISR0, 0x8, 0x8e);
     IDT[1] = generate_idt_entry((uint32_t)&ISR1, 0x8, 0x8e);
@@ -106,6 +114,7 @@ static void set_interrupts(void) {
     IDT[46] = generate_idt_entry((uint32_t)&IRQ14, 0x8, 0x8e);
     IDT[47] = generate_idt_entry((uint32_t)&IRQ15, 0x8, 0x8e);
 }
+*/
 
 extern void idt_flush(uint64_t*, uint16_t);
 extern void remap_irq();
@@ -113,17 +122,11 @@ extern void remap_irq();
 void load_idt(void) {
     idt_init();
     remap_irq();
-    set_interrupts();
+    //set_interrupts();
+    install_isrs();
+    install_irqs();
     idt_flush(IDT, sizeof(IDT));
 }
 
-void interrupt_handler(struct stack_frame* frame) {
-    if (frame->int_num <= 31) {
-        printk("Interrupt %d triggered: %s\nSystem halted\n", frame->int_num, exceptions[frame->int_num]);
-    }
-    else {
-        printk("Unnamed interrupt triggered\n");
-    }
-    for (;;);
-}
-    
+//void request_handler(struct stack_frame* frame) {
+

@@ -36,6 +36,3 @@ Hang:
     jmp     Hang
 
 .size _start, . - _start
-
-# TODO: Implement ISRs
-

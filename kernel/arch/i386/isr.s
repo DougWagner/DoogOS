@@ -233,7 +233,7 @@ ISR_COMMON:
         mov     fs, ax
         mov     gs, ax
         push    esp
-        call    interrupt_handler
+        call    isr_handler
         pop     eax
         pop     gs
         pop     fs
