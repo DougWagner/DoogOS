@@ -14,7 +14,7 @@ void delay(size_t x) {
 
 void kernel_main(void) {
     printk("Welcome to DoogOS! Have fun doing nothing!\n");
-    delay(100);
+    /*delay(100);
     printk("We will be testing the printk function now!\n");
     delay(100);
     char* alpha = "abcdefghijklmnopqrstuvwxyz";
@@ -58,5 +58,6 @@ void kernel_main(void) {
         current[0] = alpha[i % 26];
         printk(current);
         delay(1);
-    }
+    }*/
+    for (;;);
 }

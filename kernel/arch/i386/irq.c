@@ -4,6 +4,8 @@
 
 #include "idt.h"
 
+void keyboard_handler();
+
 // IRQ function Pointers
 extern void IRQ0();
 extern void IRQ1();
@@ -27,6 +29,7 @@ void* irq_funcs[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 void install_irqs(void) {
     install_idt_entry(32, (uint32_t)&IRQ0, 0x8, 0x8e);
     install_idt_entry(33, (uint32_t)&IRQ1, 0x8, 0x8e);
+    irq_funcs[1] = &keyboard_handler;
     install_idt_entry(34, (uint32_t)&IRQ2, 0x8, 0x8e);
     install_idt_entry(35, (uint32_t)&IRQ3, 0x8, 0x8e);
     install_idt_entry(36, (uint32_t)&IRQ4, 0x8, 0x8e);
@@ -44,8 +47,17 @@ void install_irqs(void) {
 }
 
 void irq_handler(struct stack_frame* frame) {
-    void (*func)(void) = irq_funcs[frame->int_num - 32];
+    //printk("irq %d triggered\n", frame->int_num);
+    void (*func)(void) = irq_funcs[frame->int_num];
     if (func != 0) {
         func();
     }
 }
+
+extern unsigned char get_scancode();
+
+void keyboard_handler(void) {
+    unsigned char sc = get_scancode();
+    printk("%d ", sc);
+}
+

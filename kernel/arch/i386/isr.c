@@ -111,7 +111,7 @@ void install_isrs(void) {
 }
 
 void isr_handler(struct stack_frame* frame) {
-    printk("ISR %d triggered: %s\n"/*System halted\n"*/, frame->int_num, exceptions[frame->int_num]);
+    printk("ISR %d triggered: %s. error code: %d\n"/*System halted\n"*/, frame->int_num, exceptions[frame->int_num], frame->error_code);
     void (*func)(void) = isr_funcs[frame->int_num];
     if (func != 0) {
         func();
