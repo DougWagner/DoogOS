@@ -102,9 +102,159 @@ static unsigned char lctrl = 0;
 static unsigned char rctrl = 0;
 static unsigned char capslock = 0;
 
+static char shift_key(char c) {
+    if (c <= 'z' && c >= 'a') {
+        return c - 32;
+    }
+    else if (c <= 'Z' && c >= 'A') {
+        return c + 32;
+    }
+    switch (c) {
+    case '1':
+        return '!';
+    case '2':
+        return '@';
+    case '3':
+        return '#';
+    case '4':
+        return '$';
+    case '5':
+        return '%';
+    case '6':
+        return '^';
+    case '7':
+        return '&';
+    case '8':
+        return '*';
+    case '9':
+        return '(';
+    case '0':
+        return ')';
+    case '-':
+        return '_';
+    case '=':
+        return '+';
+    case '[':
+        return '{';
+    case ']':
+        return '}';
+    case '`':
+        return '~';
+    case '\\':
+        return '|';
+    case ';':
+        return ':';
+    case '\'':
+        return '\"';
+    case ',':
+        return '<';
+    case '.':
+        return '>';
+    case '/':
+        return '?';
+    default:
+        return c;
+    }
+}
+
+static char capslock_toggled(char c) {
+    if (c <= 'z' && c >= 'a') {
+        return c - 32;
+    }
+    else if (c <= 'Z' && c >= 'A') {
+        return c + 32;
+    }
+    return c;
+}
+
+static void e0_nextcode(unsigned char sc) {
+    switch (sc) {
+    case 0x1c: // keypad enter
+        break;
+    case 0x1d: // right ctrl
+        rctrl = 1;
+        break;
+    case 0x35: // keypad /
+        break;
+    case 0x38: // right alt
+        ralt = 1;
+        break;
+    case 0x47: // home
+        break;
+    case 0x48: // cursor up
+        break;
+    case 0x49: // page up
+        break;
+    case 0x4b: // cursor left
+        break;
+    case 0x4d: // cursor right
+        break;
+    case 0x4f: // end
+        break;
+    case 0x50: // cursor down
+        break;
+    case 0x51: // page down
+        break;
+    case 0x52: // insert
+        break;
+    case 0x53: // delete
+        break;
+    case 0x5b: // left GUI
+        break;
+    case 0x5c: // right GUI
+        break;
+    case 0x5d: // "apps"
+        break;
+    case 0x9c: // keypad enter released
+        break;
+    case 0x9d: // right ctrl released
+        rctrl = 0;
+        break;
+    case 0xb5: // keypad / released
+        break;
+    case 0xb8: // right alt released
+        ralt = 0;
+        break;
+    case 0xc7: // home released
+        break;
+    case 0xc8: // cursor up released
+        break;
+    case 0xc9: // page up released
+        break;
+    case 0xcb: // cursor left released
+        break;
+    case 0xcd: // cursor right released
+        break;
+    case 0xcf: // end released
+        break;
+    case 0xd0: // cursor down released
+        break;
+    case 0xd1: // page down released
+        break;
+    case 0xd2: // insert released
+        break;
+    case 0xd3: // delete released
+        break;
+    case 0xdb: // right GUI released
+        break;
+    case 0xdc: // left GUI released
+        break;
+    case 0xdd: // "apps released
+        break;
+    default: // probably shouldn't be triggered.
+        break;
+    }
+}
+
 void keyboard_handler(void) {
     unsigned char sc = get_scancode();
+    if (e0_code) {
+        e0_nextcode(sc);
+        e0_code = 0;
+        return;
+    }
     if (sc < 128) {
+        char c = scancode_list[sc];
         switch (sc) {
         case 0x01: // escape button
             break;
@@ -118,16 +268,24 @@ void keyboard_handler(void) {
             t_putchar('\n');
             break;
         case 0x1d: // left ctrl
+            lctrl = 1;
             break;
         case 0x2a: // left shift
+            lshift = 1;
             break;
         case 0x36: // right shift
+            rshift = 1;
             break;
         case 0x37: // keypad *
             break;
         case 0x38: // left alt
+            lalt = 1;
             break;
         case 0x3a: // capslock
+            if (capslock)
+                capslock = 0;
+            else
+                capslock = 1;
             break;
         case 0x3b: // F1
             break;
@@ -184,7 +342,35 @@ void keyboard_handler(void) {
         case 0x58: // F12
             break;
         default:
-            t_putchar(scancode_list[sc]);
+            if (c == 0) {
+                break;
+            }
+            if (capslock) {
+                c = capslock_toggled(c);
+            }
+            if (lshift || rshift) {
+                c = shift_key(c);
+            }
+            t_putchar(c);
+            break;
+        }
+    }
+    else {
+        switch (sc) {
+        case 0x9d: // left ctrl released
+            lctrl = 0;
+            break;
+        case 0xaa: // left shift released
+            lshift = 0;
+            break;
+        case 0xb6: // right shift released
+            rshift = 0;
+            break;
+        case 0xb8: // left alt released
+            lalt = 0;
+            break;
+        case 0xe0: // special scancode - 2nd interrupt should immediately trigger and return key pressed
+            e0_code = 1;
             break;
         }
     }
