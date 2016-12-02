@@ -5,7 +5,7 @@
 
 #include "idt.h"
 
-void keyboard_handler();
+void keyboard_handler(void);
 
 // IRQ function Pointers
 extern void IRQ0();
@@ -48,7 +48,6 @@ void install_irqs(void) {
 }
 
 void irq_handler(struct stack_frame* frame) {
-    //printk("irq %d triggered\n", frame->int_num);
     void (*func)(void) = irq_funcs[frame->int_num];
     if (func != 0) {
         func();

@@ -29,6 +29,8 @@ _start:
     call    t_init
     call    load_idt
     call    load_gdt
+    cmp     eax, 0
+    je      Hang
     call    kernel_main
     cli
 Hang:  

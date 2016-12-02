@@ -63,70 +63,13 @@ void install_idt_entry(size_t idt_idx, uint32_t offset, uint16_t selector, uint8
     }
 }
 
-/*
-static void set_interrupts(void) {
-    IDT[0] = generate_idt_entry((uint32_t)&ISR0, 0x8, 0x8e);
-    IDT[1] = generate_idt_entry((uint32_t)&ISR1, 0x8, 0x8e);
-    IDT[2] = generate_idt_entry((uint32_t)&ISR2, 0x8, 0x8e);
-    IDT[3] = generate_idt_entry((uint32_t)&ISR3, 0x8, 0x8e);
-    IDT[4] = generate_idt_entry((uint32_t)&ISR4, 0x8, 0x8e);
-    IDT[5] = generate_idt_entry((uint32_t)&ISR5, 0x8, 0x8e);
-    IDT[6] = generate_idt_entry((uint32_t)&ISR6, 0x8, 0x8e);
-    IDT[7] = generate_idt_entry((uint32_t)&ISR7, 0x8, 0x8e);
-    IDT[8] = generate_idt_entry((uint32_t)&ISR8, 0x8, 0x8e);
-    IDT[9] = generate_idt_entry((uint32_t)&ISR9, 0x8, 0x8e);
-    IDT[10] = generate_idt_entry((uint32_t)&ISR10, 0x8, 0x8e);
-    IDT[11] = generate_idt_entry((uint32_t)&ISR11, 0x8, 0x8e);
-    IDT[12] = generate_idt_entry((uint32_t)&ISR12, 0x8, 0x8e);
-    IDT[13] = generate_idt_entry((uint32_t)&ISR13, 0x8, 0x8e);
-    IDT[14] = generate_idt_entry((uint32_t)&ISR14, 0x8, 0x8e);
-    IDT[15] = generate_idt_entry((uint32_t)&ISR15, 0x8, 0x8e);
-    IDT[16] = generate_idt_entry((uint32_t)&ISR16, 0x8, 0x8e);
-    IDT[17] = generate_idt_entry((uint32_t)&ISR17, 0x8, 0x8e);
-    IDT[18] = generate_idt_entry((uint32_t)&ISR18, 0x8, 0x8e);
-    IDT[19] = generate_idt_entry((uint32_t)&ISR19, 0x8, 0x8e);
-    IDT[20] = generate_idt_entry((uint32_t)&ISR20, 0x8, 0x8e);
-    IDT[21] = generate_idt_entry((uint32_t)&ISR21, 0x8, 0x8e);
-    IDT[22] = generate_idt_entry((uint32_t)&ISR22, 0x8, 0x8e);
-    IDT[23] = generate_idt_entry((uint32_t)&ISR23, 0x8, 0x8e);
-    IDT[24] = generate_idt_entry((uint32_t)&ISR24, 0x8, 0x8e);
-    IDT[25] = generate_idt_entry((uint32_t)&ISR25, 0x8, 0x8e);
-    IDT[26] = generate_idt_entry((uint32_t)&ISR26, 0x8, 0x8e);
-    IDT[27] = generate_idt_entry((uint32_t)&ISR27, 0x8, 0x8e);
-    IDT[28] = generate_idt_entry((uint32_t)&ISR28, 0x8, 0x8e);
-    IDT[29] = generate_idt_entry((uint32_t)&ISR29, 0x8, 0x8e);
-    IDT[30] = generate_idt_entry((uint32_t)&ISR30, 0x8, 0x8e);
-    IDT[31] = generate_idt_entry((uint32_t)&ISR31, 0x8, 0x8e);
-    IDT[32] = generate_idt_entry((uint32_t)&IRQ0, 0x8, 0x8e);
-    IDT[33] = generate_idt_entry((uint32_t)&IRQ1, 0x8, 0x8e);
-    IDT[34] = generate_idt_entry((uint32_t)&IRQ2, 0x8, 0x8e);
-    IDT[35] = generate_idt_entry((uint32_t)&IRQ3, 0x8, 0x8e);
-    IDT[36] = generate_idt_entry((uint32_t)&IRQ4, 0x8, 0x8e);
-    IDT[37] = generate_idt_entry((uint32_t)&IRQ5, 0x8, 0x8e);
-    IDT[38] = generate_idt_entry((uint32_t)&IRQ6, 0x8, 0x8e);
-    IDT[39] = generate_idt_entry((uint32_t)&IRQ7, 0x8, 0x8e);
-    IDT[40] = generate_idt_entry((uint32_t)&IRQ8, 0x8, 0x8e);
-    IDT[41] = generate_idt_entry((uint32_t)&IRQ9, 0x8, 0x8e);
-    IDT[42] = generate_idt_entry((uint32_t)&IRQ10, 0x8, 0x8e);
-    IDT[43] = generate_idt_entry((uint32_t)&IRQ11, 0x8, 0x8e);
-    IDT[44] = generate_idt_entry((uint32_t)&IRQ12, 0x8, 0x8e);
-    IDT[45] = generate_idt_entry((uint32_t)&IRQ13, 0x8, 0x8e);
-    IDT[46] = generate_idt_entry((uint32_t)&IRQ14, 0x8, 0x8e);
-    IDT[47] = generate_idt_entry((uint32_t)&IRQ15, 0x8, 0x8e);
-}
-*/
-
 extern void idt_flush(uint64_t*, uint16_t);
 extern void remap_irq();
 
 void load_idt(void) {
     idt_init();
     remap_irq();
-    //set_interrupts();
     install_isrs();
     install_irqs();
     idt_flush(IDT, sizeof(IDT));
 }
-
-//void request_handler(struct stack_frame* frame) {
-

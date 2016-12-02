@@ -42,4 +42,45 @@
 
 int load_gdt(void);
 
+struct tss_data {
+    uint16_t link;          // 0x00
+    uint16_t reserved0;     // 0x02
+    uint32_t esp0;          // 0x04
+    uint16_t ss0;           // 0x08
+    uint16_t reserved1;     // 0x0a
+    uint32_t esp1;          // 0x0c
+    uint16_t ss1;           // 0x10
+    uint16_t reserved2;     // 0x12
+    uint32_t esp2;          // 0x14
+    uint16_t ss2;           // 0x18
+    uint16_t reserved3;     // 0x1a
+    uint32_t cr3;           // 0x1c
+    uint32_t eip;           // 0x20
+    uint32_t eflags;        // 0x24
+    uint32_t eax;           // 0x28
+    uint32_t ecx;           // 0x2c
+    uint32_t edx;           // 0x30
+    uint32_t ebx;           // 0x34
+    uint32_t esp;           // 0x38
+    uint32_t ebp;           // 0x3c
+    uint32_t esi;           // 0x40
+    uint32_t edi;           // 0x44
+    uint16_t es;            // 0x48
+    uint16_t reserved4;     // 0x4a
+    uint16_t cs;            // 0x4c
+    uint16_t reserved5;     // 0x4e
+    uint16_t ss;            // 0x50
+    uint16_t reserved6;     // 0x52
+    uint16_t ds;            // 0x54
+    uint16_t reserved7;     // 0x56
+    uint16_t fs;            // 0x58
+    uint16_t reserved8;     // 0x5a
+    uint16_t gs;            // 0x5c
+    uint16_t reserved9;     // 0x5e
+    uint16_t ldtr;          // 0x60
+    uint16_t reserved10;    // 0x62
+    uint16_t reserved11;    // 0x64
+    uint16_t iobmap;        // 0x66
+};
+
 #endif

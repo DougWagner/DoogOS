@@ -1,11 +1,14 @@
 #include <stdint.h>
-#include <kernel/tty.h>
+#include <kernel/kernel.h>
 #include "gdt.h"
 
-uint64_t GDT[5];
+uint64_t GDT[6];
+
+struct tss_data TSS;
 
 static int checkFlagBits(uint8_t flags) {
     // this is probably a really stupid way to do this
+    // should probably ignore this function of i am ignoring the function below...
     switch(flags) {
     case FLAGS_BYTE_16:
     case FLAGS_BYTE_32:
@@ -19,6 +22,7 @@ static int checkFlagBits(uint8_t flags) {
 
 static int checkAccessBits(uint8_t access) {
     // this is also probably a really stupid way to do this
+    // this function is currently pointless because TSS segment breaks it - add more defines in gdt.h or trust GDT assignment judgement
     switch(access) {
     case ACC_HIGH_DAT_UP_RO:
     case ACC_HIGH_DAT_UP_RW:
@@ -45,16 +49,17 @@ static int checkAccessBits(uint8_t access) {
 static uint64_t generate_gdt_entry(uint32_t base, uint32_t limit, uint8_t flags, uint8_t access) {
     // check flags to ensure validity
     if (!checkFlagBits(flags)) {
-        t_writestr("Invalid flag bits\n");
+        printk("Invalid flag bits\n");
         return GDT_ENTRY_ERROR;
     }
     // check access to ensure validity
+    /* this will fail when assigning TSS segment - fix later or remove function
     if (!checkAccessBits(access)) {
-        t_writestr("Invalid access bits\n");
+        printk("Invalid access bits\n");
         return GDT_ENTRY_ERROR;
-    }
+    }*/
     if (limit > 0xfffff) {
-        t_writestr("limit too large\n");
+        printk("limit too large\n");
         return GDT_ENTRY_ERROR;
     }
     uint64_t entry = 0;
@@ -90,7 +95,9 @@ int load_gdt(void) {
     if ((GDT[4] = generate_gdt_entry(0, 0xfffff, 0xc, 0xf2)) == GDT_ENTRY_ERROR) {
         return 0;
     }
-    //GDT[3] = 0;
+    if ((GDT[5] = generate_gdt_entry((uint32_t)&TSS, sizeof(TSS), 0x4, 0x89)) == GDT_ENTRY_ERROR) { // TSS segment
+        return 0;
+    }
     gdt_flush(GDT, sizeof(GDT));
     return 1;
 }
