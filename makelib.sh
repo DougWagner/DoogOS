@@ -1,6 +1,7 @@
 #!/bin/bash
 
-SYSROOT=$HOME/os_project/DoogOS/sysroot
+PWD=$(pwd)
+SYSROOT=$PWD/sysroot
 
 # <string.h>
 # copying functions

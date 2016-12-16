@@ -1,6 +1,7 @@
 #!/bin/bash
 
-SYSROOT=$HOME/os_project/DoogOS/sysroot
+PWD=$(pwd)
+SYSROOT=$PWD/sysroot
 
 mkdir -p sysroot/usr/include
 cp -R --preserve=timestamps libc/include/. sysroot/usr/include
