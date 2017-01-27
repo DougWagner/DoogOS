@@ -31,6 +31,7 @@ _start:
     call    load_gdt
     cmp     eax, 0
     je      Hang
+    call    setup_paging
     call    kernel_main
     cli
 Hang:  
