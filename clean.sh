@@ -36,6 +36,8 @@ rm kernel/arch/i386/irq_c.o
 rm kernel/arch/i386/isr_c.o
 rm kernel/arch/i386/gdt_flush.o
 rm kernel/arch/i386/idt_flush.o
+rm kernel/arch/i386/paging.o
+rm kernel/arch/i386/paging_c.o
 rm kernel/arch/i386/mov_cursor.o
 rm kernel/arch/i386/tty.o
 rm kernel/kernel/printk.o

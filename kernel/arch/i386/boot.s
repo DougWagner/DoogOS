@@ -17,7 +17,7 @@
 .section .bss
 .align 16
 stack_bottom:
-.skip 16384 # 16 KiB stack space
+.skip 65536 # 64 KiB stack space
 stack_top:
 
 # boot entry point
