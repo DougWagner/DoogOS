@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <kernel/kernel.h>
 #include <string.h>
-#include "mem.h"
+#include <kernel/mem.h>
 
 uint32_t page_directory[1024] __attribute__((aligned(4096)));
 uint32_t kernel_page_table[1024] __attribute__((aligned(4096)));
