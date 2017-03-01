@@ -1,4 +1,19 @@
 #!/bin/bash
+# this only exists because i don't know makefiles
+
+NOCLEAN=false
+if [ $# -gt 1 ]; then
+    echo "too many arguments"
+    exit 1
+fi
+if [ $# -eq 1 ]; then
+    if [ $1 == "-noclean" ]; then
+        NOCLEAN=true
+    else
+        echo "Usage: ./build/sh -noclean"
+        exit 1
+    fi
+fi
 
 PWD=$(pwd)
 SYSROOT=$PWD/sysroot
@@ -89,10 +104,12 @@ EOF
 grub-mkrescue -o DoogOS.iso iso
 
 # time to clean up
-echo "cleaning up our mess"
-rm $I386DIR/*.o
-rm $KERNELDIR/*.o
-rm libc/*/*.o
-rm libc.a
-rm -rf sysroot
-rm -rf iso
+if [ $NOCLEAN = false ]; then
+    echo "cleaning up our mess"
+    rm $I386DIR/*.o
+    rm $KERNELDIR/*.o
+    rm libc/*/*.o
+    rm libc.a
+    rm -rf sysroot
+    rm -rf iso
+fi
