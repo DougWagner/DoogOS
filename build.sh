@@ -21,37 +21,48 @@ SYSROOT=$PWD/sysroot
 I386DIR=kernel/arch/i386
 KERNELDIR=kernel/kernel
 I386SFILES=("boot" "gdt_flush" "idt_flush" "paging" "mov_cursor" "isr" "irq") # add any i386 .s filenames here
-I386CFILES=("gdt" "idt" "isr" "irq" "paging" "tty" "cursor") # add any i386 .c filenames here
+I386CFILES=("gdt" "idt" "isr" "irq" "paging" "mem" "tty" "cursor") # add any i386 .c filenames here
 KERNELFILES=("printk" "kernel") # add any kernel .c filenames here
 SOBJEX="_s"
 COBJEX="_c"
 
 PREARGS="--sysroot=$SYSROOT -isystem=/usr/include"
 CARGS="-std=gnu11"
-ARGS="-O2 -g -ffreestanding -Wall -Wextra"
+ARGS="-g -ffreestanding -Wall -Wextra -D ARCH_I386"
 
 # copy include directories into sysroot
+echo "copying headers to sysroot/usr/include"
 mkdir -p sysroot/usr/include
 cp -R --preserve=timestamps libc/include/. sysroot/usr/include
 cp -R --preserve=timestamps kernel/include/. sysroot/usr/include
 
 # build libc.a
+echo
+echo "building libc.a"
 LIBCOBJ=""
 for FILE in libc/*/*.c; do
-    echo "i686-elf-gcc $PREARGS -c ${FILE} -o ${FILE%c}libc.o $CARGS -O2 -g $ARGS"
-    i686-elf-gcc $PREARGS -c ${FILE} -o ${FILE%c}libc.o $CARGS -O2 -g $ARGS
+    echo "i686-elf-gcc $PREARGS -c ${FILE} -o ${FILE%c}libc.o $CARGS $ARGS"
+    i686-elf-gcc $PREARGS -c ${FILE} -o ${FILE%c}libc.o $CARGS $ARGS
     LIBCOBJ="$LIBCOBJ ${FILE%c}libc.o"
 done
 echo "i686-elf-ar rcs libc.a $LIBCOBJ"
 i686-elf-ar rcs libc.a $LIBCOBJ
 
 # copy libc.a into sysroot
+echo
+echo "copying libc.a to sysroot/usr/lib"
 mkdir -p sysroot/usr/lib
 cp libc.a sysroot/usr/lib
 
+# build kernel
+echo
+echo "building DoogOS.kernel"
+
 # build crti and crtbegin
+echo "i686-elf-gcc $PREARGS -c $I386DIR/crti.s -o $I386DIR/crti.o $ARGS"
 i686-elf-gcc $PREARGS -c $I386DIR/crti.s -o $I386DIR/crti.o $ARGS
 OBJ=`i686-elf-gcc $PREARGS $ARGS -print-file-name=crtbegin.o` && cp "$OBJ" $I386DIR/crtbegin.o
+echo "OBJ='i686-elf-gcc $PREARGS $ARGS -print-file-name=crtbegin.o' && cp "$OBJ" $I386DIR/crtbegin.o"
 LINKSTR="$I386DIR/crti.o $I386DIR/crtbegin.o"
 
 # i don't use *.c for the following loops because (i think) they need to be linked in a specific order
@@ -78,6 +89,8 @@ done
 
 # build crtend and crtn
 OBJ=`i686-elf-gcc $PREARGS $ARGS -print-file-name=crtend.o` && cp "$OBJ" $I386DIR/crtend.o
+echo "OBJ='i686-elf-gcc $PREARGS $ARGS -print-file-name=crtend.o' && cp "$OBJ" $I386DIR/crtend.o"
+echo "i686-elf-gcc $PREARGS -c $I386DIR/crtn.s -o $I386DIR/crtn.o $ARGS"
 i686-elf-gcc $PREARGS -c $I386DIR/crtn.s -o $I386DIR/crtn.o $ARGS
 LINKSTR="$LINKSTR -nostdlib -lc -lgcc $I386DIR/crtend.o $I386DIR/crtn.o"
 
@@ -87,13 +100,17 @@ i686-elf-gcc $PREARGS -T $I386DIR/linker.ld -o DoogOS.kernel $ARGS $LINKSTR
 
 # we have our kernel binary! (if there were no errors)
 echo
-echo "compilation done - creating .iso image"
+echo "compilation done"
 
 # copy kernel into sysroot boot directory
+echo
+echo "copying DoogOS.kernel into sysroot/boot"
 mkdir -p sysroot/boot
 cp DoogOS.kernel sysroot/boot
 
 # create bootable .iso from sysroot
+echo
+echo "making .iso image"
 mkdir -p iso/boot/grub
 cp sysroot/boot/DoogOS.kernel iso/boot
 cat > iso/boot/grub/grub.cfg << EOF
