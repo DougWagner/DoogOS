@@ -43,4 +43,6 @@ void* kcalloc(size_t, size_t); // allocate and initialize memory within kernel h
 void* krealloc(void*, size_t); // reallocate memory within kernel heap
 void kfree(void*); // free memory allocated within kernel heap
 
+void debug_print_heap(void);
+
 #endif

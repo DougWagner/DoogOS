@@ -180,6 +180,9 @@ IRQ_COMMON:
         mov     gs, ax
         push    esp
         call    irq_handler
+        mov     ax, 0x20
+        mov     dx, 0x20
+        out     dx, ax
         pop     eax
         pop     gs
         pop     fs
@@ -187,9 +190,6 @@ IRQ_COMMON:
         pop     ds
         popad
         add     esp, 8
-        mov     ax, 0x20
-        mov     dx, 0x20
-        out     dx, ax
         iret
 
 .global get_scancode
