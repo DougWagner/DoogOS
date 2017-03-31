@@ -4,60 +4,9 @@
 
 uint64_t GDT[6];
 
-struct tss_data TSS;
-
-static int checkFlagBits(uint8_t flags) {
-    // this is probably a really stupid way to do this
-    // should probably ignore this function of i am ignoring the function below...
-    switch(flags) {
-    case FLAGS_BYTE_16:
-    case FLAGS_BYTE_32:
-    case FLAGS_PAGE_16:
-    case FLAGS_PAGE_32:
-        return 1;
-    default:
-        return 0;
-    }
-}
-
-static int checkAccessBits(uint8_t access) {
-    // this is also probably a really stupid way to do this
-    // this function is currently pointless because TSS segment breaks it - add more defines in gdt.h or trust GDT assignment judgement
-    switch(access) {
-    case ACC_HIGH_DAT_UP_RO:
-    case ACC_HIGH_DAT_UP_RW:
-    case ACC_HIGH_DAT_DN_RO:
-    case ACC_HIGH_DAT_DN_RW:
-    case ACC_HIGH_EXE_UP_XO:
-    case ACC_HIGH_EXE_UP_RX:
-    case ACC_HIGH_EXE_DN_XO:
-    case ACC_HIGH_EXE_DN_RX:
-    case ACC_LOW_DAT_UP_RO:
-    case ACC_LOW_DAT_UP_RW:
-    case ACC_LOW_DAT_DN_RO:
-    case ACC_LOW_DAT_DN_RW:
-    case ACC_LOW_EXE_UP_XO:
-    case ACC_LOW_EXE_UP_RX:
-    case ACC_LOW_EXE_DN_XO:
-    case ACC_LOW_EXE_DN_RX:
-        return 1;
-    default:
-        return 0;
-    }
-}
+tss_t TSS;
 
 static uint64_t generate_gdt_entry(uint32_t base, uint32_t limit, uint8_t flags, uint8_t access) {
-    // check flags to ensure validity
-    if (!checkFlagBits(flags)) {
-        printk("Invalid flag bits\n");
-        return GDT_ENTRY_ERROR;
-    }
-    // check access to ensure validity
-    /* this will fail when assigning TSS segment - fix later or remove function
-    if (!checkAccessBits(access)) {
-        printk("Invalid access bits\n");
-        return GDT_ENTRY_ERROR;
-    }*/
     if (limit > 0xfffff) {
         printk("limit too large\n");
         return GDT_ENTRY_ERROR;
@@ -80,6 +29,7 @@ static uint64_t generate_gdt_entry(uint32_t base, uint32_t limit, uint8_t flags,
 }
 
 extern void gdt_flush(uint64_t*, uint16_t);
+extern void tss_flush(uint16_t);
 // aaaaaaand here we go!
 int load_gdt(void) {
     GDT[0] = 0; // null descriptor
@@ -99,5 +49,6 @@ int load_gdt(void) {
         return 0;
     }
     gdt_flush(GDT, sizeof(GDT));
+    tss_flush(0x28);
     return 1;
 }

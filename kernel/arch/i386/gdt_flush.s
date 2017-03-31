@@ -20,6 +20,13 @@ complete_flush:
     sti
     ret
 
+.global tss_flush
+.type tss_flush, @function
+tss_flush:
+    mov     ax, 4[esp]
+    ltr     ax
+    ret
+
 .section .data
 gdt_ptr:
     .word 0

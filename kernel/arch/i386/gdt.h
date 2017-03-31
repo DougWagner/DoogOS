@@ -42,7 +42,7 @@
 
 int load_gdt(void);
 
-struct tss_data {
+typedef struct tss_data {
     uint16_t link;          // 0x00
     uint16_t reserved0;     // 0x02
     uint32_t esp0;          // 0x04
@@ -81,6 +81,6 @@ struct tss_data {
     uint16_t reserved10;    // 0x62
     uint16_t reserved11;    // 0x64
     uint16_t iobmap;        // 0x66
-};
+} tss_t;
 
 #endif

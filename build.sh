@@ -28,7 +28,7 @@ COBJEX="_c"
 
 PREARGS="--sysroot=$SYSROOT -isystem=/usr/include"
 CARGS="-std=gnu11"
-ARGS="-O2 -g -ffreestanding -Wall -Wextra -D ARCH_I386 -D DEBUG_HEAP"
+ARGS="-O2 -g -ffreestanding -Wall -Wextra -D ARCH_I386"
 
 # copy include directories into sysroot
 echo "copying headers to sysroot/usr/include"
