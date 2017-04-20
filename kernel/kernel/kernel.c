@@ -27,7 +27,7 @@ void heap_test(void) {
     // same size worst case
     if( 1 )
     {
-        printk( "same size worst case - press enter to start\n" );
+        printk( "same size worst case\n" );
         //getchar();
         size_t i = 0;
         for( i = 0; i < NUM_POINTERS_STORED; ++i )
@@ -52,7 +52,7 @@ void heap_test(void) {
     // random size allocation and random order deallocations
     if( 1 )
     {
-        printk( "random size allocation and deallocation - press enter to start\n" );
+        printk( "random size allocation and deallocation\n" );
         //getchar();
         size_t numallocatons = 0;
         size_t i = 0;
@@ -104,7 +104,7 @@ void heap_test(void) {
     // same size random allocation and deallocation
     if ( 1 )
     {
-        printk( "same size random allocation and deallocation - press enter to start\n" );
+        printk( "same size random allocation and deallocation\n" );
         //getchar();
         size_t numallocatons = 0;
         size_t i = 0;
@@ -154,7 +154,7 @@ void heap_test(void) {
     // rolling size increase allocation
     if( 1 )
     {
-        printk( "rolling size increase allocation - press enter to start\n" );
+        printk( "rolling size increase allocation\n" );
         //getchar();
         size_t current_size = 1;
 
@@ -200,9 +200,10 @@ void heap_test(void) {
 }
 
 void kernel_main(void) {
+    srand(SRAND);
+    printk("Welcome to DoogOS! Have fun doing nothing!\n");
     init_heap();
     heap_test();
-    printk("Welcome to DoogOS! Have fun doing nothing!\n");
 
     for (;;);
 }

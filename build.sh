@@ -1,6 +1,28 @@
 #!/bin/bash
 # this only exists because i don't know makefiles
 
+function cleanup
+{
+    if [ $NOCLEAN = false ]; then
+        echo "cleaning up our mess"
+        rm $I386DIR/*.o
+        rm $KERNELDIR/*.o
+        rm libc/*/*.o
+        rm libc.a
+        rm -rf sysroot
+        rm -rf iso
+    fi
+}
+
+function testcomp
+{
+    if [ $? -ne 0 ]; then
+        echo "Compilation failed - terminating"
+        cleanup
+        exit 1
+    fi
+}
+
 NOCLEAN=false
 if [ $# -gt 1 ]; then
     echo "too many arguments"
@@ -10,7 +32,7 @@ if [ $# -eq 1 ]; then
     if [ $1 == "-noclean" ]; then
         NOCLEAN=true
     else
-        echo "Usage: ./build/sh -noclean"
+        echo "Usage: ./build.sh -noclean"
         exit 1
     fi
 fi
@@ -28,7 +50,7 @@ COBJEX="_c"
 
 PREARGS="--sysroot=$SYSROOT -isystem=/usr/include"
 CARGS="-std=gnu11"
-ARGS="-O2 -g -ffreestanding -Wall -Wextra -D ARCH_I386"
+ARGS="-O2 -g -ffreestanding -Wall -Wextra -fdiagnostics-color=always -DARCH_I386 -DSRAND=$RANDOM"
 
 # copy include directories into sysroot
 echo "copying headers to sysroot/usr/include"
@@ -43,10 +65,12 @@ LIBCOBJ=""
 for FILE in libc/*/*.c; do
     echo "i686-elf-gcc $PREARGS -c ${FILE} -o ${FILE%c}libc.o $CARGS $ARGS"
     i686-elf-gcc $PREARGS -c ${FILE} -o ${FILE%c}libc.o $CARGS $ARGS
+    testcomp
     LIBCOBJ="$LIBCOBJ ${FILE%c}libc.o"
 done
 echo "i686-elf-ar rcs libc.a $LIBCOBJ"
 i686-elf-ar rcs libc.a $LIBCOBJ
+testcomp
 
 # copy libc.a into sysroot
 echo
@@ -61,7 +85,9 @@ echo "building DoogOS.kernel"
 # build crti and crtbegin
 echo "i686-elf-gcc $PREARGS -c $I386DIR/crti.s -o $I386DIR/crti.o $ARGS"
 i686-elf-gcc $PREARGS -c $I386DIR/crti.s -o $I386DIR/crti.o $ARGS
+testcomp
 OBJ=`i686-elf-gcc $PREARGS $ARGS -print-file-name=crtbegin.o` && cp "$OBJ" $I386DIR/crtbegin.o
+testcomp
 echo "OBJ='i686-elf-gcc $PREARGS $ARGS -print-file-name=crtbegin.o' && cp "$OBJ" $I386DIR/crtbegin.o"
 LINKSTR="$I386DIR/crti.o $I386DIR/crtbegin.o"
 
@@ -70,6 +96,7 @@ LINKSTR="$I386DIR/crti.o $I386DIR/crtbegin.o"
 for FILE in ${I386SFILES[@]}; do
     echo "i686-elf-gcc $PREARGS -c $I386DIR/$FILE.s -o $I386DIR/$FILE$SOBJEX.o $ARGS"
     i686-elf-gcc $PREARGS -c $I386DIR/$FILE.s -o $I386DIR/$FILE$SOBJEX.o $ARGS
+    testcomp
     LINKSTR="$LINKSTR $I386DIR/$FILE$SOBJEX.o"
 done
 
@@ -77,6 +104,7 @@ done
 for FILE in ${I386CFILES[@]}; do
     echo "i686-elf-gcc $PREARGS -c $I386DIR/$FILE.c -o $I386DIR/$FILE$COBJEX.o $CARGS $ARGS"
     i686-elf-gcc $PREARGS -c $I386DIR/$FILE.c -o $I386DIR/$FILE$COBJEX.o $CARGS $ARGS
+    testcomp
     LINKSTR="$LINKSTR $I386DIR/$FILE$COBJEX.o"
 done
 
@@ -84,19 +112,23 @@ done
 for FILE in ${KERNELFILES[@]}; do
     echo "i686-elf-gcc $PREARGS -c $KERNELDIR/$FILE.c -o $KERNELDIR/$FILE$COBJEX.o $CARGS $ARGS"
     i686-elf-gcc $PREARGS -c $KERNELDIR/$FILE.c -o $KERNELDIR/$FILE$COBJEX.o $CARGS $ARGS
+    testcomp
     LINKSTR="$LINKSTR $KERNELDIR/$FILE$COBJEX.o"
 done
 
 # build crtend and crtn
 OBJ=`i686-elf-gcc $PREARGS $ARGS -print-file-name=crtend.o` && cp "$OBJ" $I386DIR/crtend.o
+testcomp
 echo "OBJ='i686-elf-gcc $PREARGS $ARGS -print-file-name=crtend.o' && cp "$OBJ" $I386DIR/crtend.o"
 echo "i686-elf-gcc $PREARGS -c $I386DIR/crtn.s -o $I386DIR/crtn.o $ARGS"
 i686-elf-gcc $PREARGS -c $I386DIR/crtn.s -o $I386DIR/crtn.o $ARGS
+testcomp
 LINKSTR="$LINKSTR -nostdlib -lc -lgcc $I386DIR/crtend.o $I386DIR/crtn.o"
 
 # link everything
 echo "i686-elf-gcc $PREARGS -T $I386DIR/linker.ld -o DoogOS.kernel $ARGS $LINKSTR"
 i686-elf-gcc $PREARGS -T $I386DIR/linker.ld -o DoogOS.kernel $ARGS $LINKSTR
+testcomp
 
 # we have our kernel binary! (if there were no errors)
 echo
@@ -121,12 +153,4 @@ EOF
 grub-mkrescue -o DoogOS.iso iso
 
 # time to clean up
-if [ $NOCLEAN = false ]; then
-    echo "cleaning up our mess"
-    rm $I386DIR/*.o
-    rm $KERNELDIR/*.o
-    rm libc/*/*.o
-    rm libc.a
-    rm -rf sysroot
-    rm -rf iso
-fi
+cleanup
